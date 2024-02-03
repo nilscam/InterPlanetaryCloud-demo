@@ -1,5 +1,7 @@
 FROM node:16 AS builder
 
+RUN apt-get update &&apt-get install libudev-dev
+
 # Create app directory
 WORKDIR /app
 
