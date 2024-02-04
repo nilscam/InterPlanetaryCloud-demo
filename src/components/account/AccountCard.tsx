@@ -28,7 +28,7 @@ import Modal from '../Modal';
 const AccountCard = (): JSX.Element => {
 	const { user } = useUserContext();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [input, setInput] = useState<string>(user.fullContact.contact.username || '');
+	const [input, setInput] = useState<string>(user?.fullContact?.contact?.username || '');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const toast = useToast({ duration: 2000, isClosable: true });
@@ -80,7 +80,7 @@ const AccountCard = (): JSX.Element => {
 								<HStack spacing="16px">
 									<Avatar
 										size="32"
-										name={user.account.address}
+										name={user?.account?.address}
 										variant="marble"
 										colors={[
 											colors.red['1000'],
@@ -91,7 +91,7 @@ const AccountCard = (): JSX.Element => {
 										]}
 									/>
 									<Text color={textColor} size="xl">
-										{user.fullContact.contact.username}
+										{user?.fullContact?.contact?.username}
 									</Text>
 								</HStack>
 								<HStack spacing="16px">
@@ -111,7 +111,7 @@ const AccountCard = (): JSX.Element => {
 										<Box as="span" fontWeight="500">
 											My address:
 										</Box>{' '}
-										{user.account.address}
+										{user?.account?.address}
 									</Text>
 									<Icon
 										as={BsClipboard}
@@ -126,7 +126,7 @@ const AccountCard = (): JSX.Element => {
 										<Box as="span" fontWeight="500">
 											My public key:
 										</Box>{' '}
-										{user.account.publicKey}
+										{user?.account?.publicKey}
 									</Text>
 									<Icon
 										as={BsClipboard}

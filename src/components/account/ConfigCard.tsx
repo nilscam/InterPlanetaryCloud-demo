@@ -74,7 +74,7 @@ const ConfigCard = (): JSX.Element => {
 									</Text>
 								</HStack>
 
-								{Object.keys(user.config).map((key) => {
+								{user?.config && Object.keys(user.config).map((key) => {
 									if (user.config[key].type === 'select')
 										return (
 											<ConfigSelect key={`${key}-select`} option={key} isLoading={isLoading} onClick={changeConfig} />
