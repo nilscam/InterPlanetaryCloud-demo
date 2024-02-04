@@ -37,3 +37,6 @@ yarn-error.log*
 
 repositories/**/*
 .metamask
+
+# Sentry Config File
+.sentryclirc

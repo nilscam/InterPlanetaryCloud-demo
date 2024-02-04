@@ -8,3 +8,4 @@ export const ALEPH_CHANNEL = process.env.NEXT_PUBLIC_ALEPH_CHANNEL;
 export const GITCLONE_DIR = process.env.NEXT_PUBLIC_GITCLONE_DIR;
 export const GITHUB_CLIENT_ID = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
 export const GITHUB_CLIENT_SECRET = process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET;
+export const NEXT_ENV = process.env.NODE_ENV;

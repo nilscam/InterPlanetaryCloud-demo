@@ -2,6 +2,7 @@ import { Text, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import * as Sentry from "@sentry/browser";
 
 import { useAuthContext } from 'contexts/auth';
 import { useConfigContext } from 'contexts/config';
@@ -36,6 +37,9 @@ const Login = (): JSX.Element => {
 		setUser(login.user);
 		await router.push('/drive');
 		await login.user.drive.autoDelete();
+
+		Sentry.setUser({ id: login.user.account.address });
+
 		return { success: true, message: login.message };
 	};
 
@@ -48,6 +52,8 @@ const Login = (): JSX.Element => {
 		setUser(login.user);
 		await router.push('/drive');
 		await login.user.drive.autoDelete();
+		Sentry.setUser({ id: login.user.account.address });
+
 		return { success: true, message: login.message };
 	};
 

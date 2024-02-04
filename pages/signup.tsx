@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import * as Sentry from "@sentry/browser";
 
 import { Text, Textarea, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 
@@ -38,6 +39,9 @@ const Signup = (): JSX.Element => {
 		setMnemonics(signup.mnemonic);
 		setUser(signup.user);
 		setConfig(signup.user.config);
+
+		Sentry.setUser({ id: signup.user.account.address });
+
 		return { success: true, message: signup.message };
 	};
 
