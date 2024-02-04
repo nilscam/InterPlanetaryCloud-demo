@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { accounts } from 'aleph-sdk-ts';
 import { DEFAULT_API_V2 } from 'aleph-sdk-ts/dist/global';
 import { aggregate, forget, store } from 'aleph-sdk-ts/dist/messages';
@@ -120,7 +121,7 @@ class Drive {
 			}
 			return { success: false, message: 'Content is empty', file: undefined };
 		} catch (err) {
-			console.error(err);
+			Sentry.captureException(err);
 			return { success: false, message: 'Failed to upload the file', file: undefined };
 		}
 	}
