@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import {
 	Box,
 	Button,
@@ -40,8 +41,8 @@ const AccountCard = (): JSX.Element => {
 			setIsOpen(false);
 			toast({ title: config1.message, status: config1.success ? 'success' : 'error' });
 		} catch (error) {
+			Sentry.captureException(error);
 			toast({ title: 'Failed to change name', status: 'error' });
-			console.error(error);
 		}
 		setIsLoading(false);
 	};

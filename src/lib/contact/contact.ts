@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate, forget, post } from 'aleph-sdk-ts/dist/messages';
 import { AggregateMessage, ItemType } from 'aleph-sdk-ts/dist/messages/message';
@@ -48,7 +49,7 @@ class Contact {
 
 			return { success: true, message: 'Contacts loaded' };
 		} catch (err) {
-			console.error(err);
+			Sentry.captureException(err)
 			return { success: false, message: 'Failed to load contacts' };
 		}
 	}
@@ -113,7 +114,7 @@ class Contact {
 				}),
 			);
 		} catch (err) {
-			console.error(err);
+			Sentry.captureException(err)
 		}
 	}
 }

@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
 import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
@@ -77,7 +78,7 @@ class Auth {
 
 			return { user, mnemonic, message: 'Your account has been created successfully.' };
 		} catch (err) {
-			console.error(err);
+			Sentry.captureException(err)
 			return { user: undefined, mnemonic: undefined, message: 'An error occurred while creating your account.' };
 		}
 	}
@@ -92,7 +93,7 @@ class Auth {
 
 			return { user, message: 'You have been logged in successfully.' };
 		} catch (err) {
-			console.error(err);
+			Sentry.captureException(err)
 			return { user: undefined, message: 'An error occurred while logging to your account.' };
 		}
 	}
@@ -106,7 +107,7 @@ class Auth {
 
 			return { user, message: 'You have been logged in successfully.' };
 		} catch (err) {
-			console.error(err);
+			Sentry.captureException(err)
 			return { user: undefined, message: 'An error occurred while logging to your account.' };
 		}
 	}

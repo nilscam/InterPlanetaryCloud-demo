@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { accounts } from 'aleph-sdk-ts';
 import { aggregate } from 'aleph-sdk-ts/dist/messages';
 
@@ -42,7 +43,7 @@ class User {
 
 			return { success: true, message: 'Config loaded' };
 		} catch (err) {
-			console.error(err);
+			Sentry.captureException(err)
 			return { success: false, message: 'Failed to load account' };
 		}
 	}
