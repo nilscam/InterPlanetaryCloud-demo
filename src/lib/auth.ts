@@ -33,10 +33,6 @@ class Auth {
 		},
 	};
 
-	public async logout(): Promise<void> {
-		localStorage.clear();
-	}
-
 	private async createAggregate(account: accounts.ethereum.ETHAccount): Promise<void> {
 		try {
 			await aggregate.Get<AggregateType>({
