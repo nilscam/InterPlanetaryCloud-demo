@@ -1,3 +1,4 @@
+import mixpanel from 'mixpanel-browser';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
@@ -46,7 +47,19 @@ const App = ({
 				setError(e);
 			}
 		}
+		mixpanel.init('a3f1e086c2edf4fdb6034fc73f818662', {
+			debug: true, track_pageview: true
+		});
 	}, []);
+
+	useEffect(() => {
+		if (user?.account?.address) {
+			mixpanel.identify(user.account.address);
+			mixpanel.people.set({
+				$address: user.account.address
+			});
+		}
+	}, [user]);
 
 	useEffect(() => {
 		if (error) {
