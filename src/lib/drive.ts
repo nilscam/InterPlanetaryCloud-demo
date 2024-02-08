@@ -80,49 +80,44 @@ class Drive {
 		content: ArrayBuffer,
 		infos: { key: ArrayBuffer; iv: Uint8Array },
 	): Promise<UploadResponse> {
-		try {
-			if (content) {
-				const fileHashPublishStore = await store.Publish({
-					channel: ALEPH_CHANNEL,
-					account: this.account,
-					fileObject: Buffer.from(
-						await crypto.subtle.encrypt(
+		if (content) {
+			const fileHashPublishStore = await store.Publish({
+				channel: ALEPH_CHANNEL,
+				account: this.account,
+				fileObject: Buffer.from(
+					await crypto.subtle.encrypt(
+						{
+							name: 'AES-GCM',
+							iv: infos.iv,
+						},
+						await crypto.subtle.importKey(
+							'raw',
+							infos.key,
 							{
 								name: 'AES-GCM',
-								iv: infos.iv,
+								length: 256,
 							},
-							await crypto.subtle.importKey(
-								'raw',
-								infos.key,
-								{
-									name: 'AES-GCM',
-									length: 256,
-								},
-								true,
-								['encrypt', 'decrypt'],
-							),
-							Buffer.from(content),
+							true,
+							['encrypt', 'decrypt'],
 						),
+						Buffer.from(content),
 					),
-					storageEngine: ItemType.ipfs,
-					APIServer: DEFAULT_API_V2,
-				});
+				),
+				storageEngine: ItemType.ipfs,
+				APIServer: DEFAULT_API_V2,
+			});
 
-				const newFile: IPCFile = {
-					...file,
-					hash: fileHashPublishStore.content.item_hash,
-					encryptInfos: {
-						key: (await this.account.encrypt(Buffer.from(infos.key))).toString('hex'),
-						iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
-					},
-				};
-				return { success: true, message: 'File uploaded', file: newFile };
-			}
-			return { success: false, message: 'Content is empty', file: undefined };
-		} catch (err) {
-			console.error(err);
-			return { success: false, message: 'Failed to upload the file', file: undefined };
+			const newFile: IPCFile = {
+				...file,
+				hash: fileHashPublishStore.content.item_hash,
+				encryptInfos: {
+					key: (await this.account.encrypt(Buffer.from(infos.key))).toString('hex'),
+					iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
+				},
+			};
+			return { success: true, message: 'File uploaded', file: newFile };
 		}
+		return { success: false, message: 'Content is empty', file: undefined };
 	}
 
 	public async autoDelete() {
