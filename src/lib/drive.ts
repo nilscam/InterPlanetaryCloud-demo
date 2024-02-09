@@ -16,6 +16,7 @@ import type {
 	ResponseType,
 	UploadResponse,
 } from 'types/types';
+import mixpanel from 'mixpanel-browser';
 
 export const MONTH_MILLIS = 86400 * 30 * 1000;
 
@@ -116,6 +117,9 @@ class Drive {
 						iv: (await this.account.encrypt(Buffer.from(infos.iv))).toString('hex'),
 					},
 				};
+
+				mixpanel.track('File uploaded', { filesize: newFile.size, filename: newFile.name, hash: newFile.hash});
+
 				return { success: true, message: 'File uploaded', file: newFile };
 			}
 			return { success: false, message: 'Content is empty', file: undefined };
@@ -147,6 +151,8 @@ class Drive {
 			});
 
 			this.files = this.files.filter((file) => !fileHashes.includes(file.hash));
+
+			fileHashes.forEach((hash) => mixpanel.track('File deleted', { hash }));
 
 			return { success: true, message: 'File deleted' };
 		} catch (err) {
@@ -180,6 +186,9 @@ class Drive {
 				Buffer.from(storeFile),
 			);
 			fileDownload(decryptedFile, file.name);
+
+			mixpanel.track('File downloaded', { filesize: file.size, filename: file.name, hash: file.hash });
+
 			return { success: true, message: 'File downloaded' };
 		} catch (err) {
 			console.error(err);

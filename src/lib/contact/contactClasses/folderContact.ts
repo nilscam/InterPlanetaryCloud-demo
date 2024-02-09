@@ -1,5 +1,6 @@
 import type { IPCFolder, ResponseType } from 'types/types';
 
+import mixpanel from 'mixpanel-browser';
 import Contact from '../contact';
 
 class ContactFolder {
@@ -14,6 +15,12 @@ class ContactFolder {
 				await this.contact.publishAggregate();
 				return { success: true, message: 'Folder created' };
 			}
+
+			mixpanel.track('Folder created', {
+				name: folder.name,
+				path: folder.path,
+			});
+
 			return { success: false, message: 'Failed to load contact' };
 		} catch (err) {
 			console.error(err);
@@ -49,6 +56,9 @@ class ContactFolder {
 				});
 
 				await this.contact.publishAggregate();
+
+				mixpanel.track('Folder moved', { name: folder.name, originalPath: folder.path, newPath });
+
 				return { success: true, message: 'Folder created' };
 			}
 			return { success: false, message: 'Failed to load contact' };
@@ -70,6 +80,7 @@ class ContactFolder {
 
 				await this.contact.publishAggregate();
 
+				mixpanel.track('Folder deleted', { name: folder.name, path: folder.path });
 				return { success: true, message: 'Folder deleted' };
 			}
 			return { success: false, message: 'Failed to find your contact' };

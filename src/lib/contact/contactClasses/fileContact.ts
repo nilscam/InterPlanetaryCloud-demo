@@ -3,6 +3,7 @@ import { ItemType } from 'aleph-sdk-ts/dist/messages/message';
 
 import type { AggregateType, IPCFile, ResponseType } from 'types/types';
 
+import mixpanel from 'mixpanel-browser';
 import Contact from '../contact';
 
 class ContactFile {
@@ -38,6 +39,13 @@ class ContactFile {
 					storageEngine: ItemType.ipfs,
 				});
 			}
+
+			mixpanel.track('File renamed', {
+				hash: concernedFile.hash,
+				originalName: concernedFile.name,
+				newName,
+			});
+
 			return { success: true, message: 'Filename updated' };
 		} catch (err) {
 			console.error(err);
@@ -123,6 +131,9 @@ class ContactFile {
 					storageEngine: ItemType.ipfs,
 				});
 			}
+
+			mixpanel.track('File updated', { hash: newFile.hash });
+
 			return { success: true, message: 'File content updated' };
 		} catch (err) {
 			console.error(err);
@@ -172,6 +183,9 @@ class ContactFile {
 						date: Date.now(),
 					});
 					await this.contact.publishAggregate();
+
+					mixpanel.track('File moved', { hash: file.hash });
+
 					return { success: true, message: 'File moved' };
 				}
 				return { success: false, message: 'File does not exist' };
